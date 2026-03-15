@@ -14,14 +14,15 @@ const token = import.meta.env.VITE_API_KEY;
 
 interface FetchMoviesParams {
   query: string;
+  page?: number;
 }
 
-export const fetchMovies = async ({ query }: FetchMoviesParams): Promise<Movie[]> => {
+export const fetchMovies = async ({ query, page }: FetchMoviesParams): Promise<Movie[]> => {
   const response = await axios.get<MoviesResponse>(BASE_URL, {
     params: {
       query,
       language: "en-US",
-      page: 1,
+      page: page || 1,
       include_adult: false,
     },
     headers: {
