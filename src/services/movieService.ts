@@ -17,12 +17,12 @@ interface FetchMoviesParams {
   page?: number;
 }
 
-export const fetchMovies = async ({ query, page }: FetchMoviesParams): Promise<Movie[]> => {
+export const fetchMovies = async ({ query, page = 1 }: FetchMoviesParams): Promise<MoviesResponse> => {
   const response = await axios.get<MoviesResponse>(BASE_URL, {
     params: {
       query,
       language: "en-US",
-      page: page || 1,
+      page,
       include_adult: false,
     },
     headers: {
@@ -30,5 +30,5 @@ export const fetchMovies = async ({ query, page }: FetchMoviesParams): Promise<M
     },
   });
 
-  return response.data.results;
+  return response.data;
 };

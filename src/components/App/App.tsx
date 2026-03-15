@@ -15,7 +15,6 @@ import { fetchMovies } from "../../services/movieService";
 type MoviesResponse = {
   results: Movie[];
   total_pages: number;
-  // add other fields if needed
 };
 
 import css from "./App.module.css";
@@ -27,22 +26,7 @@ export default function App() {
 
   const { data, isLoading, isError } = useQuery<MoviesResponse>({
     queryKey: ["movies", query, page],
-    queryFn: async () => {
-      const response = await fetchMovies({ query, page }) as MoviesResponse | Movie[];
-      // If fetchMovies returns an array, wrap it in an object
-      if (Array.isArray(response)) {
-        return {
-          results: response,
-          total_pages: 1,
-        };
-      }
-      // Otherwise, assume it returns the correct shape
-      return {
-        results: (response as MoviesResponse).results ?? [],
-        total_pages: (response as MoviesResponse).total_pages ?? 0,
-        // add other fields if needed
-      };
-    },
+    queryFn: () => fetchMovies({ query, page }),
     enabled: query !== "",
     placeholderData: keepPreviousData, // не очищає попередню сторінку під час запиту
   });
